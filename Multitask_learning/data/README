@@ -1,1 +1,2 @@
-
+This directory saves the input dataset that is loaded in the model.
+The data saved in this directory is generated from data_preprocessing.ipynb
