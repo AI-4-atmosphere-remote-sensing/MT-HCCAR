@@ -3,15 +3,15 @@
 The implementation of MT-HCCAR published at [Needs to add link after publication] in PyTorch.
 
 ## Table of contents
-- [Table of contents](https://github.com/AI-4-atmosphere-remote-sensing/MT-HCCAR/main/README.md#table-of-contents)
+- [Table of contents](https://github.com/AI-4-atmosphere-remote-sensing/MT-HCCAR/tree/main?tab=readme-ov-file#table-of-contents)
 - [Introduction](https://github.com/AI-4-atmosphere-remote-sensing/MT-HCCAR/tree/main?tab=readme-ov-file#introduction)
-- [Architecture](https://github.com/AI-4-atmosphere-remote-sensing/MT-HCCAR/main/README.md#architecture)
-- [Downloading Datasets](https://github.com/AI-4-atmosphere-remote-sensing/MT-HCCAR/main/README.md#downloading-datasets)
-- [Usage](https://github.com/AI-4-atmosphere-remote-sensing/MT-HCCAR/main/README.md#training-and-testing)
-  - [Installation](https://github.com/AI-4-atmosphere-remote-sensing/MT-HCCAR/main/README.md#Usage)
-  - [Training](https://github.com/AI-4-atmosphere-remote-sensing/MT-HCCAR/main/README.md#training)
-  - [Prediction](https://github.com/AI-4-atmosphere-remote-sensing/MT-HCCAR/main/README.md#Prediction)
-- [Our Results](https://github.com/AI-4-atmosphere-remote-sensing/MT-HCCAR/main/README.md#results)
+- [Architecture](https://github.com/AI-4-atmosphere-remote-sensing/MT-HCCAR/tree/main?tab=readme-ov-file#architecture)
+- [Downloading Datasets](https://github.com/AI-4-atmosphere-remote-sensing/MT-HCCAR/tree/main?tab=readme-ov-file#downloading-datasets)
+- [Usage](https://github.com/AI-4-atmosphere-remote-sensing/MT-HCCAR/tree/main?tab=readme-ov-file#usage)
+  - [Installation](https://github.com/AI-4-atmosphere-remote-sensing/MT-HCCAR/tree/main?tab=readme-ov-file#installation)
+  - [Training](https://github.com/AI-4-atmosphere-remote-sensing/MT-HCCAR/tree/main?tab=readme-ov-file#training)
+  - [Prediction](https://github.com/AI-4-atmosphere-remote-sensing/MT-HCCAR/tree/main?tab=readme-ov-file#prediction)
+- [Our Results](https://github.com/AI-4-atmosphere-remote-sensing/MT-HCCAR/tree/main?tab=readme-ov-file#our-results)
 
 ## Introduction
 The retrieval of cloud properties, denoting the estimation of diverse characteristics of clouds through the analysis of data acquired from remote sensing instruments, plays an essential role in atmospheric and environmental studies. This research involves the identification of clouds, and the prediction of their phase (liquid or ice) and cloud optical thickness (COT), in satellite imagery. 
