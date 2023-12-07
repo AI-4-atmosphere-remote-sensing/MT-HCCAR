@@ -1,9 +1,0 @@
-# Instructions
-1. Data preprocessing: Two methods
-   1. Use preprocessed dataset: copy the preprocessed dataset from [this link to google drive](https://drive.google.com/drive/folders/1uzETlfB_7tSfMUzMa4WalOE1EdzYkZGw) to the directory 'Multitask_learning/data'.
-   2. Preprocess the dataset from beginning: run the file 'data_preprocessing,ipynb'. The raw dataset is 'rt_nn_cloud_training_data_20230518.nc'.
-2. Get trained model: Two methods
-   1. Run the file 'Multitask_learning/oci_multitask_3labels_regularization.ipynb'. The model with the smallest validation loss will be save under directory 'Multitask_learning/models'.
-   2. Get the already-trained model from [this link to google drive folder](https://drive.google.com/drive/folders/16ymtWl6zxyKFvrVrJQbUbGRcKhkgMJYa)
-3. Test the model
-   1. Run the file 'Multitask_learning/test_multitaskmlp.ipynb'. The generated images will be saved in 'results'.
