@@ -32,5 +32,6 @@ MT-HCCAR: an end-to-end multi-task learning model with hierarchical classificati
 ### Training
 ### Prediction
 ## Our Results
+![scatter1_pressed](https://github.com/AI-4-atmosphere-remote-sensing/MT-HCCAR/assets/90643297/894ededd-568f-423f-a259-59013747f99f)
 
 
