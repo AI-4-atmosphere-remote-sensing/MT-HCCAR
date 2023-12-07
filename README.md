@@ -4,7 +4,7 @@ The implementation of MT-HCCAR published at [Needs to add link after publication
 
 ## Table of contents
 - [Table of contents](https://github.com/AI-4-atmosphere-remote-sensing/MT-HCCAR/main/README.md#table-of-contents)
-- [Introduction](https://github.com/AI-4-atmosphere-remote-sensing/MT-HCCAR/main/README.md#introduction)
+- [Introduction](https://github.com/AI-4-atmosphere-remote-sensing/MT-HCCAR/tree/main?tab=readme-ov-file#introduction)
 - [Architecture](https://github.com/AI-4-atmosphere-remote-sensing/MT-HCCAR/main/README.md#architecture)
 - [Downloading Datasets](https://github.com/AI-4-atmosphere-remote-sensing/MT-HCCAR/main/README.md#downloading-datasets)
 - [Usage](https://github.com/AI-4-atmosphere-remote-sensing/MT-HCCAR/main/README.md#training-and-testing)
