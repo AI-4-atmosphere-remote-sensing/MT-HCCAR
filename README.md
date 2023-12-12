@@ -27,12 +27,21 @@ To address these objectives, we propose an end-to-end Multi-Task Learning (MTL) 
 MT-HCCAR: an end-to-end multi-task learning model with hierarchical classification (HC) and cross attention assisted regression (CAR). The HC sub-network consists of the cloud masking module $C_{Mask}(\cdot)$ and the cloud phase classification module $C_{Phase}(\cdot)$. The CAR sub-network consists of the auxiliary coarse classification module $C_{Aux}(\cdot)$, the cross attention module $A(\cdot)$, and the regression module $R(\cdot)$. On the right is the structure of $A(\cdot)$.
 
 ## Downloading Datasets
-Please download the simulated dataset in '.nc' file from [this link]([url](https://drive.google.com/drive/folders/1Hpb_Os1aJm0yD6mdqC3-n5Zd9LY5hjdi?usp=sharing)).
+Please download the simulated dataset in '.nc' file from ![this link]([url](https://drive.google.com/drive/folders/1Hpb_Os1aJm0yD6mdqC3-n5Zd9LY5hjdi?usp=sharing)).
 
 ## Usage
 ### Installation
+1. Install PyTorch 1.13 or a newer version.
+2. Clone this repository
+3. Install required packages
+```
+pip install -r requirements.txt
+```
 ### Training
-### Prediction
+Under the directory of 'MTHCCAR', run command:
+```
+python train.py
+```
 ## Our Results
 ![scatter1_pressed](https://github.com/AI-4-atmosphere-remote-sensing/MT-HCCAR/assets/90643297/894ededd-568f-423f-a259-59013747f99f)
 
