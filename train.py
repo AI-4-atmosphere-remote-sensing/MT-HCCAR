@@ -1,17 +1,19 @@
 import argparse
+import random
+import numpy as np
 import torch
 from torch import nn
-import torch.utils.data as Data
-from torch.utils.data import DataLoader
+from torch.utils.data import TensorDataset, DataLoader
 import matplotlib.pyplot as plt
 from pathlib import Path
 from datetime import date
 
 from model.model import MTHCCAR
+from utils.data_loader import Preprocessing
 
-dir_data = Path('./data/')
-dir_models = Path('./models/')
-dir_results = Path('./results/')
+dir_data = Path('./data/rt_nn_cloud_training_data_20231016.nc')
+dir_models = './models'
+dir_results = './results'
 
 def train_model(
         model,
@@ -22,27 +24,23 @@ def train_model(
         cls_w: float = 0.6,
         exp: str = f'{date.today().month}{date.today().day}'
 ):
+    # 1. Create dataset
+    X_train, y_train, X_val, y_val = Preprocessing(dir_data)
 
-    X_train_t = torch.load(f'{dir_data}X_train_t.pt')
-    y_train_t = torch.load(f'{dir_data}y_train_{exp}.pt')
-
-    X_val_t = torch.load(f'{dir_data}X_val_{exp}.pt')
-    y_val_t = torch.load(f'{dir_data}y_val_{exp}.pt')
-
-    # Create data loaders
-    dataset_train = Data.TensorDataset(X_train_t, y_train_t)
-    dataset_val = Data.TensorDataset(X_val_t, y_val_t)
+    # 2. Create data loaders
+    dataset_train = TensorDataset(X_train, y_train)
+    dataset_val = TensorDataset(X_val, y_val)
     train_loader = DataLoader(dataset = dataset_train, batch_size = batch_size, shuffle=True, pin_memory=True)
     validate_loader = DataLoader(dataset = dataset_val, batch_size = batch_size, shuffle=True, pin_memory=True)
 
-    # Set up the optimizer, the loss, the learning rate 
+    # 3. Set up the optimizer, the loss, the learning rate 
     loss_recon = nn.L1Loss()
     loss_cls = nn.BCELoss()
     loss_clsaux = nn.CrossEntropyLoss()
-    loss_reg = nn.L1Loss() # Pay attention to the threshold between cloud and non-cloud pxiels # add penalty to -1.5
-    optimizer = torch.optim.Adam(model.parameters(), lr=0.00001)
+    loss_reg = nn.L1Loss()
+    optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 
-    # Begin training
+    # 4. Begin training
     train_loss_all = []
     valid_loss_all = []
     train_loss_cls1 = []
@@ -54,13 +52,13 @@ def train_model(
     valid_loss_cls3 = []
     valid_loss_reg = []
     ## Max and minvalue of COT, to recover COT to its original range
-    max_value = 2.5
-    min_value = -2.0
+    max_value = Preprocessing.max_value
+    min_value = Preprocessing.min_value
 
     ## Select model based on validation loss
     valid_loss_min = 10.0
 
-    file = open(f'{dir_results}{exp}oci_log.txt',"w")
+    file = open(f'{dir_results}/{exp}oci_log.txt',"w")
 
     for epoch in range(epochs): 
     
@@ -85,6 +83,9 @@ def train_model(
             mask = []
             # Get predictions
             recon, output_cls1, output_cls2, output_cls3, cloud_mask, output_reg = model(b_x)
+            output_cls1 = torch.sigmoid(output_cls1)
+            output_cls2 = torch.sigmoid(output_cls2)
+            output_cls3 = torch.sigmoid(output_cls3)
             output_reg = output_reg*(max_value-min_value)+min_value
             cloud_n = torch.sum(cloud_mask)
             minibatch_n = output_cls1.shape[0]
@@ -142,6 +143,9 @@ def train_model(
             mask = []
             # Get predictions
             recon_valid, output_cls1_valid, output_cls2_valid, output_cls3_valid, cloud_mask_valid, output_reg_valid = model(c_x)
+            output_cls1_valid = torch.sigmoid(output_cls1_valid)
+            output_cls2_valid = torch.sigmoid(output_cls2_valid)
+            output_cls3_valid = torch.sigmoid(output_cls3_valid)
             output_reg_valid = output_reg_valid*(max_value-min_value)+min_value
             cloud_n = torch.sum(cloud_mask_valid)
             minibatch_n = output_cls1_valid.shape[0]
@@ -182,7 +186,7 @@ def train_model(
 
         if (valid_loss / valid_num) <= valid_loss_min:
             valid_loss_min = (valid_loss / valid_num)
-            torch.save(model.state_dict(), f'{dir_models}{exp}_min_valid_loss.pth')
+            torch.save(model.state_dict(), f'{dir_models}/{exp}_min_valid_loss.pth')
     
     file.write(f'Minimum Valid Loss: Epoch {epoch} - {valid_loss_min:.3f} \n')
     file.close()
@@ -196,7 +200,7 @@ def train_model(
     plt.grid()
     plt.xlabel('epoch')
     plt.ylabel('Loss')
-    plt.savefig(f'{dir_results}{exp}_loss.png')
+    plt.savefig(f'{dir_results}/{exp}_loss.png')
     plt.show()
 
     plt.figure(figsize = (8,6))
@@ -213,7 +217,7 @@ def train_model(
     plt.grid()
     plt.xlabel('epoch')
     plt.ylabel('Loss (classification and regression)')
-    plt.savefig(f'{dir_results}{exp}_loss_detail.png')
+    plt.savefig(f'{dir_results}/{exp}_loss_detail.png')
     plt.show()
 
 
@@ -229,11 +233,14 @@ def get_args():
                         help='The name of experiment', dest='exp')
     return parser.parse_args()
 
-
 if __name__ == '__main__':
     args = get_args()
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    model = MTHCCAR()
+    model = MTHCCAR(input_size=233)
+    # if args.load:
+    #     state_dict = torch.load(args.load, map_location=device)
+    #     del state_dict['mask_values']
+    #     model.load_state_dict(state_dict)
     model.to(device=device)
     train_model(
             model=model,
