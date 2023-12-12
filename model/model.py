@@ -1,10 +1,13 @@
 """ Model architecture of MT-HCCAR. """
-from cross_att import *
+from .cross_att import *
 
 class MTHCCAR(nn.Module):
+  '''
+    Multilayer Perceptron for regression.
+  '''
   def __init__(self, input_size):
     super().__init__()
-    self.encoder = (
+    self.encoder = nn.Sequential(
       nn.Linear(input_size, 128),
       nn.ReLU(),
       nn.Linear(128, 64),
@@ -13,40 +16,39 @@ class MTHCCAR(nn.Module):
       nn.ReLU(),
     )
       
-    self.cls_mask = nn.Sequential (
+    self.cls1 = nn.Sequential (
       nn.Linear(32, 64),
       nn.ReLU(),
       nn.Linear(64, 1),
       nn.Sigmoid(),
     )
-    self.cls_phase = nn.Sequential (
+    self.cls2 = nn.Sequential (
       nn.Linear(32, 64),
       nn.ReLU(),
       nn.Linear(64, 1),
       nn.Sigmoid(),
     )
-    self.cls_aux1 = nn.Sequential (
+    self.cls31 = nn.Sequential (
       nn.Linear(32, 64),
       nn.ReLU(),
       nn.Linear(64, 128),
       nn.ReLU(),
     )
-    self.cls_aux2 = nn.Sequential (
+    self.cls32 = nn.Sequential (
       nn.Linear(128, 3),
       nn.Sigmoid(),
     )
 
-    self.reg_cot1 = nn.Sequential (
+    self.reg1 = nn.Sequential (
       nn.Linear(32, 64),
       nn.ReLU(),
       nn.Linear(64, 128),
       nn.ReLU(),
     )
     self.cross_attn = nn.Sequential(
-      # Cross att with a residual connection
-      CrossAtt(in_channels=128, dimension=2),
+      CrossATT(in_channels=128),
     )
-    self.reg_cot2 = nn.Sequential (
+    self.reg2 = nn.Sequential (
       nn.Linear(128, 1),
     )
 
@@ -57,20 +59,19 @@ class MTHCCAR(nn.Module):
     )
 
   def forward(self, x):
-    # Encoder
+    '''
+      Forward pass
+    '''
     feature = self.encoder(x)
-    # HC
-    cloud_mask = self.cls_mask(feature)
-    mask_binary = torch.where(cloud_mask<=0.5, 1, 0)
-    x_cloudy =  feature * mask_binary
-    cloud_phase = self.cls_phase(x_cloudy)
-    # CAR
-    aux_feature = self.cls_aux1(x_cloudy)
-    cls_aux = self.cls_aux2(aux_feature)
-    regression_feature = self.reg_cot1(x_cloudy)
-    attn_feature = self.cross_attn((regression_feature, cls_aux))
-    regression = self.reg_cot2(attn_feature)
-    # Decoder
+    classification1 = self.cls1(feature)
+    mask_cloudy = torch.where(classification1<=0.5, 1, 0)
+    x_cloudy =  feature * mask_cloudy
+    classification2 = self.cls2(x_cloudy)
+    class3_feature = self.cls31(x_cloudy)
+    classification3 = self.cls32(class3_feature)
+    regression_feature = self.reg1(x_cloudy)
+    attn_feature = self.cross_attn((regression_feature, class3_feature))
+    regression = self.reg2(attn_feature)
     reconstruction = self.recon(feature)
 
-    return reconstruction, cloud_mask, cloud_phase, cls_aux, mask_binary, regression
+    return reconstruction, classification1, classification2, classification3, mask_cloudy, regression
