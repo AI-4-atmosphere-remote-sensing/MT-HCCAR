@@ -1,6 +1,4 @@
 import argparse
-import random
-import numpy as np
 import torch
 from torch import nn
 from torch.utils.data import TensorDataset, DataLoader
@@ -11,18 +9,20 @@ from datetime import date
 from model.model import MTHCCAR
 from utils.data_loader import Preprocessing
 
-dir_data = Path('./data/rt_nn_cloud_training_data_20231016.nc')
+dir_data = './data/rt_nn_cloud_training_data_20231016.nc'
 dir_models = './models'
 dir_results = './results'
 
+Path(dir_models).mkdir(parents=True, exist_ok=True)
+Path(dir_results).mkdir(parents=True, exist_ok=True)
+
 def train_model(
         model,
-        device,
         epochs: int = 500,
         batch_size: int = 64,
         learning_rate: float = 1e-5,
         cls_w: float = 0.6,
-        exp: str = f'{date.today().month}{date.today().day}'
+        exp: str = f'MT_HCCAR_{date.today().month}{date.today().day}'
 ):
     # 1. Create dataset
     X_train, y_train, X_val, y_val = Preprocessing(dir_data)
@@ -80,14 +80,10 @@ def train_model(
         
         # Iterate over the DataLoader for training data
         for step, (b_x,b_y) in enumerate(train_loader):
-            mask = []
             # Get predictions
             recon, output_cls1, output_cls2, output_cls3, cloud_mask, output_reg = model(b_x)
-            output_cls1 = torch.sigmoid(output_cls1)
-            output_cls2 = torch.sigmoid(output_cls2)
-            output_cls3 = torch.sigmoid(output_cls3)
             output_reg = output_reg*(max_value-min_value)+min_value
-            cloud_n = torch.sum(cloud_mask)
+            cloud_n = torch.sum(cloud_mask)+1
             minibatch_n = output_cls1.shape[0]
 
             # Get ground truth values
@@ -101,14 +97,14 @@ def train_model(
             ground_truth_cls3 = torch.concatenate((cls3_1, cls3_2, cls3_3), 1)
             ground_truth_cls3 = ground_truth_cls3.float()
 
-            ## Loss functions
+            # Loss functions
             l_recon = loss_recon(recon, b_x)
             l_cls1 = loss_cls(output_cls1, ground_truth_cls1)
             l_cls2 = loss_cls(output_cls2, ground_truth_cls2)*minibatch_n/cloud_n
             l_cls3 = loss_clsaux(output_cls3, ground_truth_cls3)*minibatch_n/cloud_n
             l_reg = loss_reg(output_reg, ground_truth_reg)*minibatch_n/cloud_n
 
-            ### Compute L1 loss component
+            ## Compute L1 loss component
             l1_weight = 0.0002
             l1_parameters = []
             for parameter in model.parameters():
@@ -140,14 +136,10 @@ def train_model(
         train_loss_reg.append(train_reg / train_num)
 
         for setp, (c_x, c_y) in enumerate(validate_loader):
-            mask = []
             # Get predictions
             recon_valid, output_cls1_valid, output_cls2_valid, output_cls3_valid, cloud_mask_valid, output_reg_valid = model(c_x)
-            output_cls1_valid = torch.sigmoid(output_cls1_valid)
-            output_cls2_valid = torch.sigmoid(output_cls2_valid)
-            output_cls3_valid = torch.sigmoid(output_cls3_valid)
             output_reg_valid = output_reg_valid*(max_value-min_value)+min_value
-            cloud_n = torch.sum(cloud_mask_valid)
+            cloud_n = torch.sum(cloud_mask_valid)+1
             minibatch_n = output_cls1_valid.shape[0]
 
             # Get ground truth values
@@ -192,7 +184,7 @@ def train_model(
     file.close()
     print('Training process has finished.')
 
-    # Save loss function plots
+    # 5. Save loss function plots
     plt.figure(figsize = (8,6))
     plt.plot(train_loss_all, 'r-', label = 'Training loss')
     plt.plot(valid_loss_all, 'b-', label = 'Validation loss')
@@ -201,7 +193,7 @@ def train_model(
     plt.xlabel('epoch')
     plt.ylabel('Loss')
     plt.savefig(f'{dir_results}/{exp}_loss.png')
-    plt.show()
+    # plt.show()
 
     plt.figure(figsize = (8,6))
     plt.plot(train_loss_cls1, 'r-', label = 'Training classification loss 1')
@@ -218,18 +210,17 @@ def train_model(
     plt.xlabel('epoch')
     plt.ylabel('Loss (classification and regression)')
     plt.savefig(f'{dir_results}/{exp}_loss_detail.png')
-    plt.show()
-
+    # plt.show()
 
 def get_args():
     parser = argparse.ArgumentParser(description='Train the MT-HCCAR on OCI dataset')
     parser.add_argument('--epochs', '-e', metavar='E', type=int, default=5, help='Number of epochs')
-    parser.add_argument('--batch-size', '-b', dest='batch_size', metavar='B', type=int, default=1, help='Batch size')
+    parser.add_argument('--batch-size', '-b', dest='batch_size', metavar='B', type=int, default=64, help='Batch size')
     parser.add_argument('--learning-rate', '-l', metavar='LR', type=float, default=1e-5,
                         help='Learning rate', dest='lr')
     parser.add_argument('--loss-weight-of-cls', '-w', metavar='WCLS', type=float, default=0.6,
                         help='The weight of classifications task in loss function', dest='w_cls')
-    parser.add_argument('--experiment-name', '-n', metavar='EXP', type=str, default='mthccar_training',
+    parser.add_argument('--experiment-name', '-n', metavar='EXP', type=str, default='mthccar_oci',
                         help='The name of experiment', dest='exp')
     return parser.parse_args()
 
