@@ -38,11 +38,11 @@ Please download the simulated dataset in '.nc' file from [this link](https://www
 pip install -r requirements.txt
 ```
 ### Training
-Under the directory of 'MTHCCAR', run command:
+Under the directory of 'MTHCCAR', run the command:
 ```
 python train.py
 ```
 ## Our Results
+Bellowing are scatter plots of true values v.s. predictions of models in the ablation experiment. 
+
 ![scatter1_pressed](https://github.com/AI-4-atmosphere-remote-sensing/MT-HCCAR/assets/90643297/894ededd-568f-423f-a259-59013747f99f)
-
-
