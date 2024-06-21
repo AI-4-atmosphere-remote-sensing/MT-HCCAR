@@ -119,7 +119,7 @@ def train_model(
             l_reg.requires_grad_(True)
             file.write(f'Train recon Loss: {l_recon:.3f}, Train CLS Loss 1: {l_cls1:.3f}, Train CLS Loss 2: {l_cls2:.3f}, Train CLS Loss 3: {l_cls3:.3f}, Train REG Loss: {l_reg:.3f}\n') 
 
-            optimizer.zero_grad
+            optimizer.zero_grad()
             loss.backward()
             optimizer.step()
 
