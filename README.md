@@ -12,6 +12,7 @@ The implementation of MT-HCCAR published at [Needs to add link after publication
   - [Training](https://github.com/AI-4-atmosphere-remote-sensing/MT-HCCAR/tree/main?tab=readme-ov-file#training)
   - [Prediction](https://github.com/AI-4-atmosphere-remote-sensing/MT-HCCAR/tree/main?tab=readme-ov-file#prediction)
 - [Our Results](https://github.com/AI-4-atmosphere-remote-sensing/MT-HCCAR/tree/main?tab=readme-ov-file#our-results)
+- [Citation](https://github.com/AI-4-atmosphere-remote-sensing/MT-HCCAR/tree/main?tab=readme-ov-file#Citation)
 
 ## Introduction
 The retrieval of cloud properties, denoting the estimation of diverse characteristics of clouds through the analysis of data acquired from remote sensing instruments, plays an essential role in atmospheric and environmental studies. This research involves the identification of clouds, and the prediction of their phase (liquid or ice) and cloud optical thickness (COT), in satellite imagery. 
@@ -46,3 +47,19 @@ python train.py
 Bellowing are scatter plots of true values v.s. predictions of models in the ablation experiment. 
 
 ![scatter1_pressed](https://github.com/AI-4-atmosphere-remote-sensing/MT-HCCAR/assets/90643297/894ededd-568f-423f-a259-59013747f99f)
+
+## Citation
+
+Please cite our paper using the BibTex as below:
+
+```
+@article{Li2024MTHCCARMD,
+  title={MT-HCCAR: Multi-Task Deep Learning with Hierarchical Classification and Attention-based Regression for Cloud Property Retrieval},
+  author={Xingyan Li and Andrew M. Sayer and Ian T. Carroll and Xin Huang and Jianwu Wang},
+  journal={ArXiv},
+  year={2024},
+  volume={abs/2401.16520},
+  url={https://api.semanticscholar.org/CorpusID:267320266}
+}
+```
+
