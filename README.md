@@ -1,6 +1,6 @@
 # MT-HCCAR: Multi-Task Deep Learning with Hierarchical Classification and Attention-based Regression for Cloud Property Retrieval
 
-This repository is the implementation of MT-HCCAR published at [ECML-PKDD 2024] (https://ecmlpkdd.org/2024/) in PyTorch. Please access our paper [by this link](https://link.springer.com/chapter/10.1007/978-3-031-70381-2_1).
+This repository is the implementation of MT-HCCAR published at [ECML-PKDD 2024](https://ecmlpkdd.org/2024/) in PyTorch. Please access our paper [by this link](https://link.springer.com/chapter/10.1007/978-3-031-70381-2_1).
 
 ## Table of contents
 - [Table of contents](https://github.com/AI-4-atmosphere-remote-sensing/MT-HCCAR/tree/main?tab=readme-ov-file#table-of-contents)
