@@ -50,16 +50,28 @@ Bellowing are scatter plots of true values v.s. predictions of models in the abl
 
 ## Citation
 
+Our paper on Springer: [https://link.springer.com/chapter/10.1007/978-3-031-70381-2_1#citeas](https://link.springer.com/chapter/10.1007/978-3-031-70381-2_1#citeas) 
+
 Please cite our paper using the BibTex as below:
 
 ```
-@article{Li2024MTHCCARMD,
-  title={MT-HCCAR: Multi-Task Deep Learning with Hierarchical Classification and Attention-based Regression for Cloud Property Retrieval},
-  author={Xingyan Li and Andrew M. Sayer and Ian T. Carroll and Xin Huang and Jianwu Wang},
-  journal={ArXiv},
-  year={2024},
-  volume={abs/2401.16520},
-  url={https://api.semanticscholar.org/CorpusID:267320266}
+@InProceedings{10.1007/978-3-031-70381-2_1,
+author="Li, Xingyan
+and Sayer, Andrew M.
+and Carroll, Ian T.
+and Huang, Xin
+and Wang, Jianwu",
+editor="Bifet, Albert
+and Krilavi{\v{c}}ius, Tomas
+and Miliou, Ioanna
+and Nowaczyk, Slawomir",
+title="MT-HCCAR: Multi-task Deep Learning with Hierarchical Classification and Attention-Based Regression for Cloud Property Retrieval",
+booktitle="Machine Learning and Knowledge Discovery in Databases. Applied Data Science Track",
+year="2024",
+publisher="Springer Nature Switzerland",
+address="Cham",
+pages="3--18",
+isbn="978-3-031-70381-2"
 }
 ```
 
